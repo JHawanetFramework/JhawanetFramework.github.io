@@ -4664,9 +4664,72 @@ public class Epsilon&lt;S extends Solution&lt;?&gt;&gt; extends GenericIndicator
 <div class="ulist">
 <ul>
 <li>
-<p><em>value</em>: Arreglo que recibe anotaciones del tipo <em>@NumberInput</em>.</p>
+<p><em>numbers</em>: Arreglo que recibe anotaciones del tipo <em>@NumberInput</em>.</p>
+</li>
+<li>
+<p><em>enums</em>: Arreglo que recibe anotaciones del tipo <em>EnumInput</em>.</p>
+</li>
+<li>
+<p><em>booleans</em>: Arreglo que recibe anotaciones del tipo <em>BooleanInput</em>.</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>El constructor con la anotación tiene que declarar los parámetros en el siguiente orden:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>int</em> o <em>double</em></p>
+</li>
+<li>
+<p><em>Enum</em></p>
+</li>
+<li>
+<p><em>boolean</em></p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A continuación se pregunta un ejemplo de esta anotación.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="java">public enum DE_VARIANT {
+        RAND_1_BIN,
+        RAND_1_EXP,
+        RAND_2_BIN,
+        RAND_2_EXP,
+        BEST_1_BIN,
+        BEST_1_EXP,
+        BEST_2_BIN,
+        BEST_2_EXP,
+        RAND_TO_BEST_1_BIN,
+        RAND_TO_BEST_1_EXP,
+        CURRENT_TO_RAND_1_BIN,
+        CURRENT_TO_RAND_1_EXP
+}
+
+@DefaultConstructor(
+        numbers = {
+                 @NumberInput(displayName = "cr", defaultValue = DEFAULT_CR)
+                , @NumberInput(displayName = "f", defaultValue = DEFAULT_F)
+                }
+        , enums = @EnumInput(displayName = "variant", enumClass = DE_VARIANT.class, defaultValue = "RAND_1_BIN")
+)
+public IntegerDifferentialEvolutionCrossover(double cr, double f, DE_VARIANT variant) {}</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -4732,18 +4795,17 @@ public PipeOptimizingRegister(Object selectionOperator, Object crossoverOperator
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/nuevos_experimentos/MenuDelProblema.png" alt="MenuDelProblema">
+<img src="images/anotaciones/MenuDelProblema.png" alt="MenuDelProblema">
 </div>
 </div>
 <div class="paragraph">
-<p>Esta anotación solo puede estar en un constructor, en caso de que esta anotación no esté presente, un error en tiempo de ejecución será lanzado.</p>
+<p>Esta anotación solo puede estar en un constructor, <strong>en caso de que esta anotación no esté presente, un error en tiempo de ejecución será lanzado</strong>.</p>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_parameters">4.6.3. <em>@Parameters</em></h4>
+<div class="sect4">
+<h5 id="_parameters"><em>@Parameters</em></h5>
 <div class="paragraph">
-<p>Esta anotación permite agregar información acerca de los parámetros recibidos por el constructor. Cuando el constructor tiene esta anotación, por convención, está obligado a declarar los parámetros en un orden determinado en base a tu tipo. Este orden es el siguiente:</p>
+<p>Esta anotación permite agregar información acerca de los parámetros recibidos por el constructor. <strong>Cuando el constructor tiene esta anotación, por convención, está obligado a declarar los parámetros en un orden determinado en base a tu tipo</strong>. Este orden es el siguiente:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -4752,6 +4814,12 @@ public PipeOptimizingRegister(Object selectionOperator, Object crossoverOperator
 </li>
 <li>
 <p><em>File</em></p>
+</li>
+<li>
+<p><em>Enum</em></p>
+</li>
+<li>
+<p><em>boolean</em></p>
 </li>
 <li>
 <p><em>int</em> o <em>double</em></p>
@@ -4773,6 +4841,12 @@ public PipeOptimizingRegister(Object selectionOperator, Object crossoverOperator
 <p><em>files</em>: Arreglo que recibe anotaciones del tipo <em>FileInput</em>.</p>
 </li>
 <li>
+<p><em>enums</em>: Arreglo que recibe anotaciones del tipo <em>EnumInput</em>.</p>
+</li>
+<li>
+<p><em>booleans</em>: Arreglo que recibe anotaciones del tipo <em>BooleanInput</em>.</p>
+</li>
+<li>
 <p><em>numbers</em>:  Arreglo que recibe anotaciones del tipo <em>NumberInput</em>.</p>
 </li>
 <li>
@@ -4780,12 +4854,25 @@ public PipeOptimizingRegister(Object selectionOperator, Object crossoverOperator
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Los valores de las anotaciones son inyectados en el constructor de la clase en el orden de la lista de elementos definidas anteriormente. Es decir, <em>operators</em> (inyectados como <em>Object</em>), <em>files</em> (<em>File</em>), <em>enums</em> (inyectados en como un enumerador), <em>booleans</em> (inyectados como boolean) ,<em>numbers</em> (<em>int</em> o <em>double</em>) y <em>numbersToggle</em>(<em>int</em> o <em>double</em>).
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>El valor por defecto para todos los elementos mencionados anteriormente es un arreglo vacío ({}).
 No usar la anotación <em>@Parameters</em> tiene el mismo efecto que usar la anotación, pero con sus valores por defecto.</p>
 </div>
 <div class="paragraph">
 <p>Puede ver el uso de esta anotación en el <a href="#ejemplo-anotaciones">ejemplo anterior</a>.</p>
+</div>
 </div>
 <div class="sect4">
 <h5 id="_operatorinput"><em>@OperatorInput</em></h5>
@@ -4808,7 +4895,7 @@ Dentro de esta anotación existen varios elementos. Estos elementos son:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/nuevos_experimentos/ComponenteOperatorInput.png" alt="ComponenteOperatorInput">
+<img src="images/anotaciones/ComponenteOperatorInput.png" alt="ComponenteOperatorInput">
 </div>
 </div>
 <div class="paragraph">
@@ -4816,7 +4903,7 @@ Dentro de esta anotación existen varios elementos. Estos elementos son:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/nuevos_experimentos/ComponenteOperatorInputExpandido.png" alt="ComponenteOperatorInputExpandido">
+<img src="images/anotaciones/ComponenteOperatorInputExpandido.png" alt="ComponenteOperatorInputExpandido">
 </div>
 </div>
 <div class="paragraph">
@@ -4861,7 +4948,7 @@ Dentro de esta anotación existen varios elementos. Éstos son:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/nuevos_experimentos/ComponenteFileInput.png" alt="ComponenteFileInput">
+<img src="images/anotaciones/ComponenteFileInput.png" alt="ComponenteFileInput">
 </div>
 </div>
 <div class="ulist">
@@ -4873,33 +4960,6 @@ Dentro de esta anotación existen varios elementos. Éstos son:</p>
 </div>
 <div class="paragraph">
 <p>Si el <em>TextField</em> donde se muestra la ruta está vacío, es decir, no se ha seleccionado un archivo o carpeta, entonces será inyectado <strong><em>null</em></strong> en el parámetro correspondiente del constructor.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_numberinput"><em>@NumberInput</em></h5>
-<div class="paragraph">
-<p>Esta anotación indica que hay un parámetro del tipo <em>int</em> o <em>double</em> o sus tipos envoltorios <em>Integer</em> o <em>Double</em>, respectivamente. Esta anotación agrega en la interfaz un <em>TextField</em> que solo permite como entrada un número.  Si el tipo del parámetro es <em>int</em> o <em>Integer</em>, entonces el <em>TextField</em> solo permite ingresar números enteros. Por otro lado, si el parámetro es <em>double</em> o <em>Double</em>, entonces en la interfaz se acepta el ingreso de números enteros o decimales. En la interfaz, esta anotación es visualizada como se muestra a continuación.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="images/nuevos_experimentos/ComponenteNumberInput.png" alt="ComponenteNumberInput">
-</div>
-</div>
-<div class="paragraph">
-<p>Dentro de esta anotación existen los siguientes elementos:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><em>displayName</em>: Nombre del parámetro.</p>
-</li>
-<li>
-<p><em>defaultValue</em>: Valor por defecto de la propiedad. Si el tipo de parámetro en el constructor de la clase que hereda de <em>Registrable</em> es un entero, pero se ingresa como valor por defecto un número con decimales, los decimales serán truncados. Si este elemento no se define su valor por defecto es 0.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Esta anotación puede ser utilizada dentro de la anotación <em>@DefaultConstructor</em></strong> definida al principio.</p>
 </div>
 </div>
 <div class="sect4">
@@ -4919,7 +4979,7 @@ Dentro de esta anotación existen varios elementos. Éstos son:</p>
 <p><em>groudID</em>: <em>String</em> con un id para el grupo. Las anotaciones <em>NumberToggerInput</em> que tengan el mismo id, en la interfaz, se encuentran en una sección cuyo título es el nombre del grupo. Esto se aprecia en la figura siguiente.</p>
 <div class="imageblock">
 <div class="content">
-<img src="images/nuevos_experimentos/ComponenteNumberToggleInput.png" alt="ComponenteNumberToggleInput">
+<img src="images/anotaciones/ComponenteNumberToggleInput.png" alt="ComponenteNumberToggleInput">
 </div>
 </div>
 </li>
@@ -4942,6 +5002,120 @@ Dentro de esta anotación existen varios elementos. Éstos son:</p>
 </div>
 <div class="paragraph">
 <p>Las anotaciones presentadas en las dos secciones anteriores deben ser usadas en constructores públicos.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_anotaciones_permitidas_en_operators_y_registrable">4.6.3. Anotaciones permitidas en <em>Operators</em> y <em>Registrable</em></h4>
+<div class="sect4">
+<h5 id="_numberinput"><em>@NumberInput</em></h5>
+<div class="paragraph">
+<p>Esta anotación indica que hay un parámetro del tipo <em>int</em> o <em>double</em> o sus tipos envoltorios <em>Integer</em> o <em>Double</em>, respectivamente. Esta anotación agrega en la interfaz un <em>TextField</em> que solo permite como entrada un número.  Si el tipo del parámetro es <em>int</em> o <em>Integer</em>, entonces el <em>TextField</em> solo permite ingresar números enteros. Por otro lado, si el parámetro es <em>double</em> o <em>Double</em>, entonces en la interfaz se acepta el ingreso de números enteros o decimales. En la interfaz, esta anotación es visualizada como se muestra a continuación.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/anotaciones/ComponenteNumberInput.png" alt="ComponenteNumberInput">
+</div>
+</div>
+<div class="paragraph">
+<p>Dentro de esta anotación existen los siguientes elementos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>displayName</em>: Nombre del parámetro.</p>
+</li>
+<li>
+<p><em>defaultValue</em>: Valor por defecto de la propiedad. Si el tipo de parámetro en el constructor de la clase que hereda de <em>Registrable</em> es un entero, pero se ingresa como valor por defecto un número con decimales, los decimales serán truncados. Si este elemento no se define su valor por defecto es 0.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_enuminput"><em>@EnumInput</em></h5>
+<div class="paragraph">
+<p>Esta anotación indica que hay un parámetro del tipo <em>Enum</em>. Esta anotación agrega en la interfaz un <em>ComboBox</em> que permite seleccionar la constante del enumerador. En la interfaz, esta anotación es visualizada como se muestra a continuación.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/anotaciones/ComponenteEnumerator.png" alt="ComponenteEnumerator">
+</div>
+</div>
+<div class="paragraph">
+<p>Dentro de esta anotación existen los siguientes elementos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>displayName</em>: Nombre del parámetro.</p>
+</li>
+<li>
+<p><em>enumClass</em>: El tipo de enumerador.</p>
+</li>
+<li>
+<p><em>defaultValue</em>: String que indica el valor por defecto. El <em>String</em> tiene que ser el nombre de una constante presente en el enumerador indicado en <em>enumClass</em>. Por defecto, este valor es un <em>String</em> vacio. Si este elemento tiene asignado el un <em>String</em> vacio o null, entonces el componente de la GUI tomara la primera constante del enumerador.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+Si el <em>String</em> guardado en <em>defaultValue</em> no corresponde al nombre de una constante en el enumerador <em>enumClass</em> una excepción será lanzada.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>A continuación se presenta un ejemplo del uso de esta anotación.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="java">enum Type{ZERO, ONE, TWO, THREE}
+
+@EnumInput(displayName = "Enum Type", enumClass = Type.class, defaultValue = "TWO")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Esta anotación puede ser utilizada dentro de la anotación <em>@DefaultConstructor</em> y <em>@Parameters</em></strong>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_booleaninput"><em>@BooleanInput</em></h5>
+<div class="paragraph">
+<p>Esta anotación indica que hay un parámetro del tipo boolean. En la interfaz, esta anotación es visualizada como un <em>ComboBox</em> como se muestra a continuación.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/anotaciones/ComponenteBoolean.png" alt="ComponenteBoolean">
+</div>
+</div>
+<div class="paragraph">
+<p>Dentro de esta anotación existen los siguientes elementos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><em>displayName</em>: Nombre del parámetro.</p>
+</li>
+<li>
+<p><em>defaultValue</em>: Valor por defecto de la propiedad. Este valor es opcional y por defecto es false.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A continuación se presenta un ejemplo del uso de esta anotación.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="java">@BooleanInput(displayName = "Is Enabled")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Esta anotación puede ser utilizada dentro de la anotación <em>@DefaultConstructor</em> y <em>@Parameters</em></strong>.</p>
 </div>
 </div>
 </div>
